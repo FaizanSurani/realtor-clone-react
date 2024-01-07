@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -10,7 +9,7 @@ import Header from "./components/Header";
 
 function App() {
   return (
-    <>
+    <div>
       <Router>
         <Header />
         <Routes>
@@ -22,7 +21,7 @@ function App() {
           <Route path="/offers" element={<Offers />} />
         </Routes>
       </Router>
-    </>
+    </div>
   );
 }
 
