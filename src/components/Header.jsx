@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <div className="bg-white border-b shadow-sm sticky top-0 z-50">
-      <Header className="flex justify-between items-center px-3 max-w-6xl mx-auto bg-green-50">
+      <header className="flex justify-between items-center px-3 max-w-6xl mx-auto bg-green-50">
         <div>
           <img
             src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"
@@ -47,7 +47,7 @@ export default function Header() {
             </li>
           </ul>
         </div>
-      </Header>
+      </header>
     </div>
   );
 }
