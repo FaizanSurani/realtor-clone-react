@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
+import { db } from "../Firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,11 +18,12 @@ export default function SignUp() {
     email: "",
     password: "",
     full_name: "",
-    confirm_password: "",
+    // confirm_password: "",
   });
 
   //Destructing email and password so we can use them in form input value
-  const { email, password, full_name, confirm_password } = formData;
+  const { email, password, full_name } = formData;
+  const navigate = useNavigate();
 
   function onInput(e) {
     setFormData((prevState) => ({
@@ -22,6 +32,32 @@ export default function SignUp() {
     }));
   }
 
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const auth = getAuth();
+      const userCredential = createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      updateProfile(auth.currentUser, {
+        displayName: full_name,
+      });
+      const user = (await userCredential).user;
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      toast.success("Sign up was succesfull");
+      navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong with the registration");
+    }
+  }
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Sign Up</h1>
@@ -72,7 +108,7 @@ export default function SignUp() {
                 />
               )}
             </div>
-            <div className="relative mb-6">
+            {/* <div className="relative mb-6">
               <input
                 type={showPassword ? "text" : "password"}
                 id="confirm_password"
@@ -92,7 +128,7 @@ export default function SignUp() {
                   onClick={() => setShowPassword((prevState) => !prevState)}
                 />
               )}
-            </div>
+            </div> */}
             <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg">
               <p className="mb-6">
                 Have an account?
