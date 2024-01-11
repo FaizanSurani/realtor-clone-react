@@ -1,7 +1,7 @@
 import { getAuth, updateCurrentUser, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../Firebase";
 
@@ -87,6 +87,15 @@ export default function Profile() {
               </p>
             </div>
           </form>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md transition ease-in-out duration-150 hover:bg-blue-700 hover:shadow-lg active:bg-blue-800">
+            <Link
+              to="/create-listing"
+              className="flex justify-center items-center">
+              Sell or Rent your Home
+            </Link>
+          </button>
         </div>
       </section>
     </>
