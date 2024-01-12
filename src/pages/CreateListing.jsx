@@ -30,10 +30,27 @@ export default function CreateListing() {
   } = formData;
 
   function onChange(e) {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.id]: e.target.value,
-    }));
+    let boolean = null;
+    if (e.target.value === "true") {
+      boolean = true;
+    }
+    if (e.target.value === "false") {
+      boolean = false;
+    }
+
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }));
+    }
+
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: boolean ?? e.target.value,
+      }));
+    }
   }
 
   return (
@@ -50,9 +67,9 @@ export default function CreateListing() {
             ${
               type === "rent"
                 ? "bg-white text-black"
-                : "bg-slate-600 text-black"
+                : "bg-slate-600 text-white"
             }`}
-            id="sell"
+            id="type"
             value="sale"
             onClick={onChange}>
             Sell
@@ -63,9 +80,9 @@ export default function CreateListing() {
             ${
               type === "sale"
                 ? "bg-white text-black"
-                : "bg-slate-600 text-black"
+                : "bg-slate-600 text-white"
             }`}
-            id="rent"
+            id="type"
             value="rent"
             onClick={onChange}>
             Rent
@@ -120,7 +137,7 @@ export default function CreateListing() {
             id="parking"
             value={true}
             className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full 
-            ${!parking ? "bg-white text-black" : "bg-slate-600 text-black"}`}
+            ${!parking ? "bg-white text-black" : "bg-slate-600 text-white"}`}
             onClick={onChange}>
             Yes
           </button>
@@ -129,7 +146,7 @@ export default function CreateListing() {
             id="parking"
             value={false}
             className={`m1-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full 
-            ${parking ? "bg-white text-black" : "bg-slate-600 text-black"}`}
+            ${parking ? "bg-white text-black" : "bg-slate-600 text-white"}`}
             onClick={onChange}>
             No
           </button>
@@ -139,7 +156,7 @@ export default function CreateListing() {
           <button
             type="button"
             className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full 
-            ${!furnished ? "bg-white text-black" : "bg-slate-600 text-black"}`}
+            ${!furnished ? "bg-white text-black" : "bg-slate-600 text-white"}`}
             id="furnished"
             value={true}
             onClick={onChange}>
@@ -148,7 +165,7 @@ export default function CreateListing() {
           <button
             type="button"
             className={`m1-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full 
-            ${furnished ? "bg-white text-black" : "bg-slate-600 text-black"}`}
+            ${furnished ? "bg-white text-black" : "bg-slate-600 text-white"}`}
             id="furnished"
             value={false}
             onClick={onChange}>
@@ -184,7 +201,7 @@ export default function CreateListing() {
           <button
             type="button"
             className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full 
-            ${!offer ? "bg-white text-black" : "bg-slate-600 text-black"}`}
+            ${!offer ? "bg-white text-black" : "bg-slate-600 text-white"}`}
             id="offer"
             value={true}
             onClick={onChange}>
@@ -193,7 +210,7 @@ export default function CreateListing() {
           <button
             type="button"
             className={`m1-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full 
-            ${offer ? "bg-white text-black" : "bg-slate-600 text-black"}`}
+            ${offer ? "bg-white text-black" : "bg-slate-600 text-white"}`}
             id="offer"
             value={false}
             onClick={onChange}>
