@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 export default function CreateListing() {
+  const [geoLocation, setGeoLocation] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: "rent",
     name: "",
@@ -13,6 +17,9 @@ export default function CreateListing() {
     offer: false,
     regularPrice: 0,
     discountedPrice: 0,
+    images: {},
+    latitude: 0,
+    longitude: 0,
   });
 
   const {
@@ -27,6 +34,9 @@ export default function CreateListing() {
     offer,
     regularPrice,
     discountedPrice,
+    images,
+    latitude,
+    longitude,
   } = formData;
 
   function onChange(e) {
@@ -53,12 +63,31 @@ export default function CreateListing() {
     }
   }
 
+  function onSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    if (discountedPrice >= regularPrice) {
+      setLoading(false);
+      toast.error("Discounted price needs to be less than regular price");
+      return;
+    }
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error("Maximum 6 images are allowed");
+    }
+  }
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <main className="max-w-md mx-auto px-2">
       <h1 className="text-3xl text-center uppercase mt-6 font-bold">
         Create a Listing
       </h1>
-      <form>
+      <form onSubmit={onSubmit}>
         <p className="text-lg mt-6 font-semibold">Sell / Rent</p>
         <div className="flex">
           <button
@@ -184,6 +213,36 @@ export default function CreateListing() {
             className="w-full px-4 py-2 text-xl  text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
           />
         </p>
+        {!geoLocation && (
+          <div className="flex space-x-6 justify-start mb-6">
+            <div>
+              <p className="text-lg font-semibold ">Latitude</p>
+              <input
+                type="number"
+                id="latitude"
+                value={latitude}
+                onChange={onChange}
+                required
+                min="-90"
+                max="90"
+                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:bg-white focus:text-gray-700 focus:border-slate-600 text-center"
+              />
+            </div>
+            <div>
+              <p className="text-lg font-semibold ">Longitude</p>
+              <input
+                type="number"
+                id="longitude"
+                value={longitude}
+                onChange={onChange}
+                min="-180"
+                max="180"
+                required
+                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:bg-white focus:text-gray-700 focus:border-slate-600 text-center"
+              />
+            </div>
+          </div>
+        )}
         <p className="text-lg font-semibold">
           Description
           <textarea
@@ -222,7 +281,7 @@ export default function CreateListing() {
             <p className="text-lg font-semibold">Regular Price</p>
             <div className="flex justify-center items-center space-x-6">
               <input
-                type="regularPrice"
+                type="number"
                 id="regularPrice"
                 value={regularPrice}
                 onChange={onChange}
