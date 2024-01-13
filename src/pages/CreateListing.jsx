@@ -75,6 +75,7 @@ export default function CreateListing() {
     if (images.length > 6) {
       setLoading(false);
       toast.error("Maximum 6 images are allowed");
+      return;
     }
   }
 
