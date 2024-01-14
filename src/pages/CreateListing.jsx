@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { getAuth } from "firebase/auth";
+import { v4 as uuidv4 } from "uuid";
 
 export default function CreateListing() {
-  const [geoLocation, setGeoLocation] = useState(true);
+  const auth = getAuth();
+  const [geoLocationEnabled, setGeoLocationEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: "rent",
@@ -63,7 +72,7 @@ export default function CreateListing() {
     }
   }
 
-  function onSubmit(e) {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -77,7 +86,61 @@ export default function CreateListing() {
       toast.error("Maximum 6 images are allowed");
       return;
     }
-  }
+    let geolocation = {};
+
+    if (geoLocationEnabled) {
+      geolocation.lat = latitude;
+      geolocation.lng = longitude;
+    }
+
+    const storeImage = async (image) => {
+      return new Promise((resolve, reject) => {
+        const storage = getStorage();
+        const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+        const storageRef = ref(storage, filename);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {
+            reject(error);
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+    };
+
+    const imgUrls = await Promise.all(
+      [...images]
+        .map((image) => storeImage(image))
+        .catch((error) => {
+          setLoading(false);
+          toast.error("Images not Uploaded");
+          return;
+        })
+    );
+  };
 
   if (loading) {
     return <Loader />;
@@ -214,7 +277,7 @@ export default function CreateListing() {
             className="w-full px-4 py-2 text-xl  text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
           />
         </p>
-        {!geoLocation && (
+        {!geoLocationEnabled && (
           <div className="flex space-x-6 justify-start mb-6">
             <div>
               <p className="text-lg font-semibold ">Latitude</p>
