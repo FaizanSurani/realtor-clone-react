@@ -1,6 +1,13 @@
 import { getAuth, updateCurrentUser, updateProfile } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
-import React, { useState } from "react";
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../Firebase";
@@ -10,6 +17,8 @@ export default function Profile() {
   const navigate = useNavigate();
 
   const [changeDetail, setChangeDetail] = useState(false);
+  const [listings, setListings] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
@@ -43,6 +52,29 @@ export default function Profile() {
       toast.error("Could not update the profile details!");
     }
   }
+
+  useEffect(() => {
+    const fetchUserListing = async () => {
+      const listingRef = collection(db, "listings");
+      const q = query(
+        listingRef,
+        where("userRef", "==", auth.currentUser.uid),
+        orderBy("timestamp", "desc")
+      );
+      const querySnap = await getDocs(q);
+      let listings = [];
+      querySnap.forEach;
+      (doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        });
+      };
+      setListings(listings);
+      setLoading(false);
+    };
+    fetchUserListing();
+  }, []);
 
   return (
     <>
