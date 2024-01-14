@@ -9,8 +9,12 @@ import {
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../Firebase";
+import { useNavigate } from "react-router";
 
 export default function CreateListing() {
+  const navigate = useNavigate();
   const auth = getAuth();
   const [geoLocationEnabled, setGeoLocationEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -76,7 +80,7 @@ export default function CreateListing() {
     e.preventDefault();
     setLoading(true);
 
-    if (discountedPrice >= regularPrice) {
+    if (+discountedPrice >= +regularPrice) {
       setLoading(false);
       toast.error("Discounted price needs to be less than regular price");
       return;
@@ -132,14 +136,25 @@ export default function CreateListing() {
     };
 
     const imgUrls = await Promise.all(
-      [...images]
-        .map((image) => storeImage(image))
-        .catch((error) => {
-          setLoading(false);
-          toast.error("Images not Uploaded");
-          return;
-        })
-    );
+      [...images].map((image) => storeImage(image))
+    ).catch((error) => {
+      setLoading(false);
+      toast.error("Images not Uploaded");
+      return;
+    });
+
+    const formDataCopy = {
+      ...formData,
+      imgUrls,
+      geolocation,
+      timestamp: serverTimestamp(),
+    };
+    delete formDataCopy.images;
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+    const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+    setLoading(false);
+    toast.success("Listing Created!!");
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   };
 
   if (loading) {
