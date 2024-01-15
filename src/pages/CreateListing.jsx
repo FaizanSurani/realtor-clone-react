@@ -152,10 +152,12 @@ export default function CreateListing() {
     };
     delete formDataCopy.images;
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
+    delete formDataCopy.latitude;
+    delete formDataCopy.longitude;
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+    setLoading(false);
     toast.success("Listing Created!!");
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
-    setLoading(false);
   };
 
   if (loading) {

@@ -5,9 +5,11 @@ import {
   getDocs,
   orderBy,
   query,
+  where,
   updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import ListingItem from "../components/ListingItem";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../Firebase";
@@ -62,14 +64,14 @@ export default function Profile() {
         orderBy("timestamp", "desc")
       );
       const querySnap = await getDocs(q);
-      let listings = [];
+      let Listings = [];
       querySnap.forEach((doc) => {
-        return listings.push({
+        return Listings.push({
           id: doc.id,
           data: doc.data(),
         });
       });
-      setListings(listings);
+      setListings(Listings);
       setLoading(false);
     };
     fetchUserListing();
@@ -130,7 +132,7 @@ export default function Profile() {
         </div>
       </section>
       <div className="max-w-6xl px-3 mt-6 mx-auto">
-        {!loading && listings.length > 0 && (
+        {!loading && listings && listings.length > 0 && (
           <>
             <h2 className="text-2xl text-center font-semibold">My Listing</h2>
             <ul>
