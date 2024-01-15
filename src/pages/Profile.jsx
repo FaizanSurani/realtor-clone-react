@@ -63,13 +63,12 @@ export default function Profile() {
       );
       const querySnap = await getDocs(q);
       let listings = [];
-      querySnap.forEach;
-      (doc) => {
+      querySnap.forEach((doc) => {
         return listings.push({
           id: doc.id,
           data: doc.data(),
         });
-      };
+      });
       setListings(listings);
       setLoading(false);
     };
@@ -89,7 +88,7 @@ export default function Profile() {
               disabled={!changeDetail}
               onChange={onChange}
               className={`mb-6 px-4 py-2 w-full text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out ${
-                changeDetail && "bg - red - 200 focus:bg-red-200"
+                changeDetail && "bg-red-200 focus:bg-red-200"
               }`}
             />
             <input

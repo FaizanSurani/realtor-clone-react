@@ -80,7 +80,7 @@ export default function CreateListing() {
     e.preventDefault();
     setLoading(true);
 
-    if (+discountedPrice >= +regularPrice) {
+    if (discountedPrice >= regularPrice) {
       setLoading(false);
       toast.error("Discounted price needs to be less than regular price");
       return;
@@ -102,7 +102,7 @@ export default function CreateListing() {
         const storage = getStorage();
         const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
         const storageRef = ref(storage, filename);
-        const uploadTask = uploadBytesResumable(storageRef, file);
+        const uploadTask = uploadBytesResumable(storageRef, image);
 
         uploadTask.on(
           "state_changed",
@@ -153,9 +153,9 @@ export default function CreateListing() {
     delete formDataCopy.images;
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
-    setLoading(false);
     toast.success("Listing Created!!");
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
+    setLoading(false);
   };
 
   if (loading) {
