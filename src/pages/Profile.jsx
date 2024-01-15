@@ -74,7 +74,7 @@ export default function Profile() {
       setLoading(false);
     };
     fetchUserListing();
-  }, []);
+  }, [auth.currentUser.uid]);
 
   return (
     <>
@@ -130,6 +130,22 @@ export default function Profile() {
           </button>
         </div>
       </section>
+      <div className="max-w-6xl px-3 mt-6 mx-auto">
+        {!loading && listings.length > 0 && (
+          <>
+            <h2 className="text-2xl text-center font-semibold">My Listing</h2>
+            <ul>
+              {listings.map((listing) => (
+                <ListingItem
+                  key={listing.id}
+                  id={listing.id}
+                  listing={listing.data}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </>
   );
 }

@@ -384,7 +384,7 @@ export default function CreateListing() {
               <p className="text-lg font-semibold">Discounted Price</p>
               <div>
                 <input
-                  type="discountedPrice"
+                  type="number"
                   id="discountedPrice"
                   value={discountedPrice}
                   onChange={onChange}
