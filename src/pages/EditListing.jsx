@@ -9,14 +9,7 @@ import {
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  serverTimestamp,
-  snapshotEqual,
-} from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useNavigate, useParams } from "react-router";
 
@@ -68,12 +61,23 @@ export default function EditListing() {
       const docRef = doc(db, "listings", params.listingID);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setListings(snapshot.data());
-        setFormData();
+        setListings(docSnap.data());
+        setFormData({ ...docSnap.data() });
+        setLoading(false);
+      } else {
+        navigate("/");
+        toast.error("Listing does not exist");
       }
     };
     fetchListing();
-  }, []);
+  }, [navigate, params.listingID]);
+
+  useEffect(() => {
+    if (listings && listings.userRef !== auth.currentUser.uid) {
+      toast.error("You can't edit this listing");
+      navigate("/");
+    }
+  }, [listings, navigate]);
 
   function onChange(e) {
     let boolean = null;
@@ -177,9 +181,11 @@ export default function EditListing() {
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
     delete formDataCopy.latitude;
     delete formDataCopy.longitude;
-    const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+    const docRef = doc(db, "listings", params.listingID);
+
+    await updateDoc(docRef, formDataCopy);
     setLoading(false);
-    toast.success("Listing Created!!");
+    toast.success("Listing Edited!!");
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   };
 
@@ -440,7 +446,7 @@ export default function EditListing() {
         <button
           type="submit"
           className="mb-6 w-full uppercase font-medium px-7 py-3 bg-blue-600 text-white text-sm transition rounded duration-150 ease-in-out shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg">
-          Create Listing
+          Edit Listing
         </button>
       </form>
     </main>
