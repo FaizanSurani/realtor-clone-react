@@ -9,14 +9,14 @@ import SwiperCore, {
   Autoplay,
   Navigation,
   Pagination,
-} from "swiper";
+} from "swiper/core";
 import "swiper/css/bundle";
 
 export default function Listing() {
   const params = useParams();
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
-  SwiperCore.use([EffectFade, Autoplay, Navigation, Pagination]);
+  SwiperCore.use([Autoplay, Navigation, Pagination]);
 
   useEffect(() => {
     const fetchListingData = async () => {

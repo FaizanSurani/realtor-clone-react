@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     mainFields: [],
   },
-  commonjsOptions: {
-    esmExternals: true,
-  },
+  // commonjsOptions: {
+  //   esmExternals: true,
+  // },
 });
