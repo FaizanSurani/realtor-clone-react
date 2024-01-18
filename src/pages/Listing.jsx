@@ -10,17 +10,17 @@ import "swiper/css/bundle";
 
 export default function Listing() {
   const params = useParams();
-  const [listings, setListings] = useState(null);
+  const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  SwiperCore.use(Autoplay, Navigation, Pagination);
+  SwiperCore.use([Autoplay, Navigation, Pagination]);
 
   useEffect(() => {
     const fetchListingData = async () => {
       const docRef = doc(db, "listings", params.listingID);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setListings(docSnap.data());
+        setListing(docSnap.data());
         setLoading(false);
       }
     };
@@ -38,13 +38,14 @@ export default function Listing() {
         navigation
         pagination={{ type: "progressbar" }}
         effect="fade"
-        autoplay={{ delay: 300 }}>
-        {listings.imgUrls.map((url, index) => (
+        autoplay={{ delay: 3000 }}>
+        {listing.imgUrls.map((url, index) => (
           <SwiperSlide key={index}>
             <div
-              className="w-full overflow-hidden h-[300px]"
+              className="relative w-full overflow-hidden h-[300px]"
               style={{
-                backgroundImage: `url(${listings.imgUrls[index]}) center no-repeat`,
+                background: `url(${listing.imgUrls[index]}) center no-repeat`,
+                backgroundSize: "cover",
               }}></div>
           </SwiperSlide>
         ))}
