@@ -1,3 +1,5 @@
+import { CSSSelector } from '../shared';
+
 export interface CardsEffectMethods {}
 
 export interface CardsEffectEvents {}
@@ -9,25 +11,16 @@ export interface CardsEffectOptions {
    * @default true
    */
   slideShadows?: boolean;
-
   /**
    * Enables cards rotation
    *
    * @default true
    */
   rotate?: boolean;
-
   /**
-   * Rotate angle per slide (in degrees)
+   * CSS selector of the element inside of the slide to transform instead of the slide itself. Useful to use with cssMode
    *
-   * @default 2
+   * @default null
    */
-  perSlideRotate?: number;
-
-  /**
-   * Offset distance per slide (in px)
-   *
-   * @default 8
-   */
-  perSlideOffset?: number;
+  transformEl?: CSSSelector;
 }

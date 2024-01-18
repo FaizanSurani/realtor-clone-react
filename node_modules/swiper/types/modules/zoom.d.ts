@@ -1,4 +1,4 @@
-import type Swiper from '../swiper-class.d.ts';
+import Swiper from '../swiper-class';
 
 export interface ZoomMethods {
   /**
@@ -22,9 +22,9 @@ export interface ZoomMethods {
   disable(): void;
 
   /**
-   * Zoom in image of the currently active slide. Optionally accepts custom zoom ratio
+   * Zoom in image of the currently active slide
    */
-  in(ratio?: number): void;
+  in(): void;
 
   /**
    * Zoom out image of the currently active slide
@@ -34,7 +34,7 @@ export interface ZoomMethods {
   /**
    * Toggle image zoom of the currently active slide
    */
-  toggle(event?: MouseEvent | TouchEvent | PointerEvent): void;
+  toggle(): void;
 }
 
 export interface ZoomEvents {

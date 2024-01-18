@@ -4,19 +4,16 @@ import { useParams } from "react-router";
 import { db } from "../Firebase";
 import Loader from "../components/Loader";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, {
-  EffectFade,
-  Autoplay,
-  Navigation,
-  Pagination,
-} from "swiper/core";
+import SwiperCore from "swiper";
+import { EffectFade, Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css/bundle";
 
 export default function Listing() {
   const params = useParams();
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
-  SwiperCore.use([Autoplay, Navigation, Pagination]);
+
+  SwiperCore.use(Autoplay, Navigation, Pagination);
 
   useEffect(() => {
     const fetchListingData = async () => {
@@ -36,11 +33,11 @@ export default function Listing() {
   return (
     <main>
       <Swiper
+        modules={[EffectFade]}
         slidesPerView={1}
         navigation
         pagination={{ type: "progressbar" }}
         effect="fade"
-        modules={[EffectFade]}
         autoplay={{ delay: 300 }}>
         {listings.imgUrls.map((url, index) => (
           <SwiperSlide key={index}>
