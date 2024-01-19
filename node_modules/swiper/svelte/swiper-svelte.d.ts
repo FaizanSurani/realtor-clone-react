@@ -2,8 +2,9 @@ import { SvelteComponentTyped } from 'svelte';
 import { SwiperOptions, Swiper as SwiperClass } from '../types/';
 
 // @ts-ignore
-interface SwiperProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap['div']> {}
-interface SwiperProps extends SwiperOptions {}
+interface SwiperProps
+  extends SwiperOptions,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap['div']> {}
 
 // @ts-ignore
 interface SwiperSlideProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap['div']> {
@@ -53,6 +54,9 @@ declare class Swiper extends SvelteComponentTyped<
    * Event will be fired when swiper updates the hash
    */
   hashSet: CustomEvent<[swiper: SwiperClass]>;/**
+   * Event will be fired on key press
+   */
+  keyPress: CustomEvent<[swiper: SwiperClass, keyCode: string]>;/**
    * Event will be fired in the beginning of lazy loading of image
    */
   lazyImageLoad: CustomEvent<[swiper: SwiperClass, slideEl: HTMLElement, imageEl: HTMLElement]>;
@@ -78,9 +82,6 @@ declare class Swiper extends SvelteComponentTyped<
    * Event will be fired on navigation next button click
    */
   navigationNext: CustomEvent<[swiper: SwiperClass]>;/**
-   * Event will be fired on key press
-   */
-  keyPress: CustomEvent<[swiper: SwiperClass, keyCode: string]>;/**
    * Event will be fired after pagination rendered
    */
   paginationRender: CustomEvent<[swiper: SwiperClass, paginationEl: HTMLElement]>;
