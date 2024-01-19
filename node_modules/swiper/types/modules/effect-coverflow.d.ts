@@ -1,5 +1,3 @@
-import { CSSSelector } from '../shared';
-
 export interface CoverflowEffectMethods {}
 
 export interface CoverflowEffectEvents {}
@@ -41,10 +39,4 @@ export interface CoverflowEffectOptions {
    * @default 1
    */
   modifier?: number;
-  /**
-   * CSS selector of the element inside of the slide to transform instead of the slide itself. Useful to use with cssMode
-   *
-   * @default null
-   */
-  transformEl?: CSSSelector;
 }
