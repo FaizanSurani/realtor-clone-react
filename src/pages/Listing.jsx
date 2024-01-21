@@ -135,7 +135,7 @@ export default function Listing() {
             <Contact userRef={listing.userRef} listing={listing} />
           )}
         </div>
-        <div className="w-full h-[200px] lg-[400px] z-10 overflow-x-hidden">
+        <div className="w-full h-[200px] md:h-[400px] z-10 overflow-x-hidden mt-6 md:mt-0 md:ml-1">
           <MapContainer
             center={(listing.geolocation.lat, listing.geolocation.lng)}
             zoom={13}
