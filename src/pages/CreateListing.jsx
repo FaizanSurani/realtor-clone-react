@@ -64,7 +64,7 @@ export default function CreateListing() {
     if (e.target.files) {
       setFormData((prevState) => ({
         ...prevState,
-        images: e.target.files,
+        images: Array.from(e.target.files),
       }));
     }
 
