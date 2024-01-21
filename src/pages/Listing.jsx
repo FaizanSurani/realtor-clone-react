@@ -12,6 +12,7 @@ import { FaShare } from "react-icons/fa";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Contact from "../components/Contact";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 export default function Listing() {
   const auth = getAuth();
