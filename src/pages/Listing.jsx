@@ -13,11 +13,6 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import Contact from "../components/Contact";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/effect-fade";
-import "swiper/css/autoplay";
 
 export default function Listing() {
   const auth = getAuth();
